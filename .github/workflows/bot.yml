@@ -19,7 +19,7 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: timestamp
-        path: /timestamp
+        path: timestamp
       continue-on-error: true
       
     - name: Run Docker container
@@ -31,4 +31,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: timestamp
-        path: /timestamp
+        path: timestamp
