@@ -137,6 +137,35 @@ for thread in threads_list:
     link = thread["link"]
     title = thread["title"]
 
+    # Fetch card contents
+    try:
+        resp = requests.get(link)
+        resp.raise_for_status()
+        soup = BeautifulSoup(resp.text, "html.parser")
+    except requests.RequestException as e:
+        logging.error(f"Failed to fetch card contents. Error: {e}")
+
+    title_tag = soup.find("meta", property="og:title")["content"]
+    description_tag = soup.find("meta", property="og:description")["content"]
+
+    image_url = soup.find("meta", property="og:image")["content"]
+    try:
+        resp = requests.get(image_url)
+        resp.raise_for_status()
+    except requests.RequestException as e:
+        logging.error(f"Failed to fetch card image. Error: {e}")
+    blob_resp = requests.post(
+        "https://bsky.social/xrpc/com.atproto.repo.uploadBlob",
+        headers={
+            "Content-Type": "image/png",
+            "Authorization": "Bearer " + session["accessJwt"],
+        },
+        data=resp.content,
+    )
+    blob_resp.raise_for_status()
+    thumb = blob_resp.json()["blob"]
+
+    # 300 character limit
     if len(title) > 300:
         title = title[: max_title_length - 3] + "..."  # Truncate and add ellipsis
 
@@ -148,6 +177,15 @@ for thread in threads_list:
         "text": post_text,
         "createdAt": now,
         "langs": ["en-US"],
+        "embed": {
+            "$type": "app.bsky.embed.external",
+            "external": {
+                "uri": link,
+                "title": title_tag,
+                "description": description_tag,
+                "thumb": thumb,
+            },
+        },
         "facets": [
             {
                 "index": {"byteStart": 0, "byteEnd": byte_end},
