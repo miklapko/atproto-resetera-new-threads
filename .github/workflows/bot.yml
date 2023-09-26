@@ -25,8 +25,7 @@ jobs:
     - name: Run Docker container
       run: |
         touch timestamp
-        ls -la
-#        docker run --env BLUE_LOGIN=${{ secrets.BLUE_LOGIN }} --env BLUE_PASSWORD=${{ secrets.BLUE_PASSWORD }} -v /timestamp:/timestamp calibro/resetera-nt-atproto:latest
+        docker run --env BLUE_LOGIN=${{ secrets.BLUE_LOGIN }} --env BLUE_PASSWORD=${{ secrets.BLUE_PASSWORD }} -v /timestamp:/timestamp calibro/resetera-nt-atproto:latest ls -la
         
     - name: Upload timestamp
       uses: actions/upload-artifact@v2
