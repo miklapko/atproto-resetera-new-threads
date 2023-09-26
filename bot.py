@@ -147,7 +147,12 @@ for thread in threads_list:
         logging.error(f"Failed to fetch card contents. Error: {e}")
 
     title_tag = soup.find("meta", property="og:title")["content"]
-    description_tag = soup.find("meta", property="og:description")["content"]
+    try:
+        description_tag = soup.find("meta", property="og:description")["content"]
+    except TypeError:
+        description_tag = "No description"
+    except KeyError:
+        description_tag = "No description"
 
     # Upload card image
     image_url = soup.find("meta", property="og:image")["content"]
