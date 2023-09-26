@@ -134,36 +134,28 @@ except json.JSONDecodeError as e:
 
 # Loop through the threads_list and post each thread title as a link to BlueSky
 for thread in threads_list:
-    link = thread['link']
-    title = thread['title']
-    
+    link = thread["link"]
+    title = thread["title"]
+
     if len(title) > 300:
-        title = title[:max_title_length - 3] + "..."  # Truncate and add ellipsis
-    
+        title = title[: max_title_length - 3] + "..."  # Truncate and add ellipsis
+
     post_text = f"{title}"  # Create post text with truncated thread title
-    byte_end = len(post_text.encode('utf-8'))
-    
+    byte_end = len(post_text.encode("utf-8"))
+
     post = {
         "$type": "app.bsky.feed.post",
         "text": post_text,
         "createdAt": now,
-        "langs": [ "en-US" ],
+        "langs": ["en-US"],
         "facets": [
             {
-            "index": {
-                "byteStart": 0,
-                "byteEnd": byte_end
-            },
-            "features": [
-                {
-                "$type": "app.bsky.richtext.facet#link",
-                "uri": link
-                }
-            ]
+                "index": {"byteStart": 0, "byteEnd": byte_end},
+                "features": [{"$type": "app.bsky.richtext.facet#link", "uri": link}],
             }
-        ]
+        ],
     }
-    
+
     try:
         resp = requests.post(
             "https://bsky.social/xrpc/com.atproto.repo.createRecord",
