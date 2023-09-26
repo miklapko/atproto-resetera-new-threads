@@ -35,8 +35,12 @@ timestamp_file = "timestamp"
 # Try to read the Unix time from the timestamp file, use the default value if the file doesn't exist
 try:
     with open(timestamp_file, "r") as file:
-        input_unix_time = int(file.read().strip())
-except FileNotFoundError:
+        content = file.read().strip()
+        if not content:  # Check if the file is empty
+            raise ValueError("Timestamp file is empty")
+        input_unix_time = int(content)
+except (FileNotFoundError, ValueError) as e:
+    logging.warning(f"Using default_unix_time due to error: {e}")
     input_unix_time = default_unix_time
 
 # Initialize the list to hold the threads
