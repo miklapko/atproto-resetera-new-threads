@@ -11,7 +11,7 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     
     - name: Install jq
       run: sudo apt update && sudo apt install jq
@@ -45,7 +45,7 @@ jobs:
         docker run --env BLUE_LOGIN=${{ secrets.BLUE_LOGIN }} --env BLUE_PASSWORD=${{ secrets.BLUE_PASSWORD }} -v $(pwd)/timestamp:/timestamp calibro/resetera-nt-atproto:latest
         
     - name: Upload timestamp
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: timestamp
         path: timestamp
