@@ -22,7 +22,7 @@ jobs:
       run: |
         RUN_ID=$(curl --silent --show-error \
           --header "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
-          --url "https://api.github.com/repos/${{ github.repository }}/actions/workflows/${{ github.workflow }}/runs" \
+          --url "https://api.github.com/repos/${{ github.repository }}/actions/workflows/bot.yaml/runs" \
           | jq '[.workflow_runs[] | select(.conclusion == "success")][0].id')
         
         if [ "$RUN_ID" != "null" ]; then
