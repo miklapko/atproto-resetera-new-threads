@@ -1,0 +1,30 @@
+name: Run bot
+
+#on:
+#  schedule:
+#    - cron: '*/5 * * * *'
+
+jobs:
+  run-container:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Download timestamp
+      uses: actions/download-artifact@v2
+      with:
+        name: timestamp
+        path: /timestamp
+      continue-on-error: true
+      
+    - name: Run Docker container
+      run: |
+        docker run --env BLUE_LOGIN=${{ secrets.BLUE_LOGIN }} --env BLUE_PASSWORD=${{ secrets.BLUE_PASSWORD }} -v /timestamp:/timestamp calibro/resetera-nt-bot:latest
+        
+    - name: Upload timestamp
+      uses: actions/upload-artifact@v2
+      with:
+        name: timestamp
+        path: /timestamp
