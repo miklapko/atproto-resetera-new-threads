@@ -180,7 +180,7 @@ for thread in threads_list:
 
     post = {
         "$type": "app.bsky.feed.post",
-        "text": title,
+        "text": "",
         "createdAt": now,
         "langs": ["en-US"],
         # Card
@@ -193,13 +193,6 @@ for thread in threads_list:
                 "thumb": thumb,
             },
         },
-        # Link
-        "facets": [
-            {
-                "index": {"byteStart": 0, "byteEnd": byte_end},
-                "features": [{"$type": "app.bsky.richtext.facet#link", "uri": link}],
-            }
-        ],
     }
 
     try:
