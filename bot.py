@@ -134,7 +134,7 @@ except json.JSONDecodeError as e:
     logging.error(f"Failed to decode BlueSky session response. Error: {e}")
 
 # Loop through the threads_list (old -> new) and post each thread title as a link to BlueSky
-for thread in threads_list:
+for thread in reversed(threads_list):
     link = thread["link"]
     title = thread["title"]
 
