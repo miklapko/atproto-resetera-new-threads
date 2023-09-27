@@ -155,7 +155,13 @@ for thread in threads_list:
         description_tag = "No description"
 
     # Upload card image
-    image_url = soup.find("meta", property="og:image")["content"]
+    # Find the first <img> tag with src starting with "/data/avatar/"
+    img_tag = soup.find("img", src=lambda x: x and x.startswith("/data/avatar/"))
+    # If found, construct the full URL, else use the default meta image. Use the default meta image if the specific <img> tag is not found.
+    if img_tag:
+        image_url = f"https://www.resetera.com{img_tag['src']}"
+    else:
+        image_url = soup.find("meta", property="og:image")["content"]
     try:
         resp = requests.get(image_url)
         resp.raise_for_status()
